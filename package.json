@@ -22,6 +22,7 @@
     "git-commit-msg-linter": "^5.0.4",
     "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
   }
 }

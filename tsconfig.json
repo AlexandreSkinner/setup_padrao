@@ -1,6 +1,5 @@
-
 {
-"compilerOptions": {
+  "compilerOptions": {
     "incremental": true,
     "target": "es2022",
     "module": "ESNext",
@@ -20,5 +19,6 @@
     },
     "baseUrl": "src"
   },
-  "include": ["src", "test"]
+  "include": ["src", "test"],
+  "exclude": ["dist", "node_modules"]
 }
