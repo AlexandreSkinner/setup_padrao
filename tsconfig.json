@@ -1,0 +1,24 @@
+
+{
+"compilerOptions": {
+    "incremental": true,
+    "target": "es2022",
+    "module": "ESNext",
+    "sourceMap": true,
+    "removeComments": true,
+    "esModuleInterop": true,
+    "rootDirs": ["src","test"],
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "strict": true,
+    "noEmitOnError": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@/*": ["*"],
+      "@/test/*": ["../test/*"]
+    },
+    "baseUrl": "src"
+  },
+  "include": ["src", "test"]
+}
