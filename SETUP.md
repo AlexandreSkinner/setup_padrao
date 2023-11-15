@@ -305,3 +305,81 @@ Para isso temos que passar o parâmetro abaixo, no script de buid
 ```
 tsc -p tsconfig-build.json
 ```
+
+
+
+
+» npm init @eslint/config
+? How would you like to use ESLint? …
+  To check syntax only
+  To check syntax and find problems
+▸ To check syntax, find problems, and enforce code style
+
+✔ How would you like to use ESLint? · style
+? What type of modules does your project use? …
+▸ JavaScript modules (import/export)
+  CommonJS (require/exports)
+  None of these
+
+✔ How would you like to use ESLint? · style
+✔ What type of modules does your project use? · esm
+? Which framework does your project use? …
+  React
+  Vue.js
+▸ None of these
+
+✔ How would you like to use ESLint? · style
+✔ What type of modules does your project use? · esm
+✔ Which framework does your project use? · none
+? Does your project use TypeScript? ‣ No / Yes
+
+✔ How would you like to use ESLint? · style
+✔ What type of modules does your project use? · esm
+✔ Which framework does your project use? · none
+✔ Does your project use TypeScript? · No / Yes
+? Where does your code run? …  (Press <space> to select, <a> to toggle all, <i> to invert selection)
+✔ Browser
+✔ Node
+
+✔ How would you like to use ESLint? · style
+✔ What type of modules does your project use? · esm
+✔ Which framework does your project use? · none
+✔ Does your project use TypeScript? · No / Yes
+✔ Where does your code run? · node
+? How would you like to define a style for your project? …
+▸ Use a popular style guide
+  Answer questions about your style
+
+✔ How would you like to use ESLint? · style
+✔ What type of modules does your project use? · esm
+✔ Which framework does your project use? · none
+✔ Does your project use TypeScript? · No / Yes
+✔ Where does your code run? · node
+✔ How would you like to define a style for your project? · guide
+? Which style guide do you want to follow? …
+▸ Standard: https://github.com/standard/eslint-config-standard-with-typescript
+  XO: https://github.com/xojs/eslint-config-xo-typescript
+
+✔ How would you like to use ESLint? · style
+✔ What type of modules does your project use? · esm
+✔ Which framework does your project use? · none
+✔ Does your project use TypeScript? · No / Yes
+✔ Where does your code run? · node
+✔ How would you like to define a style for your project? · guide
+✔ Which style guide do you want to follow? · standard-with-typescript
+? What format do you want your config file to be in? …
+  JavaScript
+  YAML
+▸ JSON
+
+Checking peerDependencies of eslint-config-standard-with-typescript@latest
+The config that you've selected requires the following dependencies:
+
+eslint-config-standard-with-typescript@latest @typescript-eslint/eslint-plugin@^6.4.0 eslint@^8.0.1 eslint-plugin-import@^2.25.2 eslint-plugin-n@^15.0.0 || ^16.0.0  eslint-plugin-promise@^6.0.0 typescript@*
+? Would you like to install them now? ‣ No / Yes
+
+✔ Would you like to install them now? · No / Yes
+? Which package manager do you want to use? …
+▸ npm
+  yarn
+  pnpm
