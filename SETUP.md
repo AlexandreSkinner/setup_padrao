@@ -1,5 +1,5 @@
 # Criar a pasta da aplicação.
-Cria a pasta do Projeto como uma subpasta de **projeto**.
+  Cria a pasta do Projeto como uma subpasta de **projeto**.
 
 ```
 ~/projeto
@@ -7,14 +7,14 @@ Cria a pasta do Projeto como uma subpasta de **projeto**.
 » cd vitest-template
 vitest-tamplate on  master [?]
 ```
-# Inicializar o GIT
-Este comando inicia o controle de versão do código fonte em repositório local
+# Inicializar o GIT.
+  Este comando inicia o controle de versão do código fonte em repositório local.
 
 ```
 ~/projeto/vitest-template
 » git init
 ```
-# Inicializar o projeto
+# Inicializar o projeto.
   Este comando cria um arquivo do projeto denominado **package.json** que
   controla as dependências das bibliotecas utilizadas no projeto.
 
@@ -22,8 +22,8 @@ Este comando inicia o controle de versão do código fonte em repositório local
 ~/projeto/vitest-template
 » npm init -y
 ```
-# Instalar biblioteca git-commit-msg-linter
-Esta biblioteca é responsavel por padronizar as mensagens dos nossos commit. Segue o padrão do conventional commit, bloqueando commit que não estiverem em conformidade com este padrão.
+# Instalar biblioteca git-commit-msg-linter.
+  Esta biblioteca é responsavel por padronizar as mensagens dos nossos commit. Segue o padrão do conventional commit, bloqueando commit que não estiverem em conformidade com este padrão.
  _"Conventional Commit"_.
   [Site conventional commit](https://www.conventionalcommits.org/en/v1.0.0/)
 
@@ -42,23 +42,23 @@ VSCode.md
 ```
 
 # Instalar o Typescript
-Instala o compilador da linguagem de programação Typescript e os types do *node* que adicina tipagem ao mesmo, ajudando no intellisence dos comandos
+Instala o compilador da linguagem de programação Typescript e os types do *node* que adicina tipagem ao mesmo, ajudando no intellisence dos comandos.
 
 ```
 ~/projeto/vitest-template
 » npm i -D typescript @types/node
 ```
 # Inicializando projeto Typescript.
-  Cria o arquivo de configuração do compilador typescript (tsconfig.json)
+  Cria o arquivo de configuração do compilador typescript (tsconfig.json).
 ```
   ~/projeto/vitest-template
   » npx tsc --init
 ```
 Como o typescript foi instalado como dependencia de desenvolvimento temos que utilizar o comando **npx** para executar o compilador **tsc**
 
-## Arquivo de configuração do Typescript (tsconfig.json)
+## Arquivo de configuração do Typescript (tsconfig.json).
 
-Este arquivo é inspecionado pelo typescript no momento da compilação
+Este arquivo que é inspecionado pelo typescript no momento da compilação.
 ```
 {
   "compilerOptions": {
@@ -81,10 +81,11 @@ Este arquivo é inspecionado pelo typescript no momento da compilação
     },
     "baseUrl": "src"
   },
-  "include": ["src", "test"]
+  "include": ["src", "test", "vitest.config.ts", "tsup.config.ts"],
+  "exclude": ["dist", "node_modules"]
 }
 ```
-# Instalando o ESLINT
+# Instalando o ESLINT.
 Realiza a instalação do eslint, bem como configura o padrão da sintaxe do typescript tendo por base as regras definidas no style standard-with-typescript.
 ```
   ~/projeto/vitest-template
@@ -102,7 +103,7 @@ Importante que sejam nas versões abaixo:
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
 ```
-  ## Inicializando o eslint
+  ## Inicializando o eslint.
   O eslint serve para pontuar erros de sintaxe e formatar o código fonte que estiver fora da especificação standard javascript style.
 ```
   ~/projeto/vitest-template
@@ -134,7 +135,7 @@ eslint-config-standard-with-typescript@latest @typescript-eslint/eslint-plugin@^
 
 ✅ Which package manager do you want to use? · **npm**
 
-## Arquivo de configuração do lint (.eslintrc.json)
+## Arquivo de configuração do lint (.eslintrc.json).
 Abaixo temos um exemplo do arquivo de configuração do eslint **.eslintrc.json**
 ```
 {
@@ -161,9 +162,9 @@ Abaixo temos um exemplo do arquivo de configuração do eslint **.eslintrc.json*
   }
 }
 ```
-# Instalando o husky
+# Instalando o husky.
   Permite utilizarmos os hook do git para garantir que não iremos commitar código fora das
-  diretrizes parametrizadas no eslint e que não estiverem passando no teste de unit do vitest
+  diretrizes parametrizadas no eslint e que não estiverem passando no teste de unit do vitest.
 ```
     ~/projeto/vitest-template
     » npm install husky -D
@@ -179,9 +180,9 @@ Abaixo temos um exemplo do arquivo de configuração do eslint **.eslintrc.json*
     » npx husky install
     » npx husky add .husky/pre-commit "npx lint-staged"
 ```
-## Arquivo do lintstaged (lintstagedrc.json)
+## Arquivo do lintstaged (lintstagedrc.json).
 Este arquivo define os comandos que atuaram nos arquivos na stage area disparado pelo hook do pre-commit.
-São executados o eslint para fixar os possiveis erros e o teste através do script **test:staged**
+São executados o eslint para fixar os possiveis erros e o teste através do script**test:staged**
 ```
 {
   "*.ts": [
@@ -203,7 +204,8 @@ Por padrão, o Vitest usa o pacote c8 para executar relatórios de cobertura. En
   » npm install -D @vitest/coverage-v8
 ```
 
-Abaixo temos um exemplo de arquivo de configuração do Vitest
+Abaixo temos um exemplo de arquivo de configuração do Vitest.
+
 ## Arquivo de configuração do Vitest (vitest.config.js)
 Este arquivo configura o vitest, dentre outras coisas, para reconhecer os alias _"@/*"_ e _"@/test/*"_
 ```
@@ -233,6 +235,9 @@ export default defineConfig({
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "build": "tsup src",
+    "start": "tsx ./src/index.ts",
+    "start:dev": "tsx watch ./src/index.ts",
     "test": "vitest --passWithNoTests --run",
     "test:unit": "vitest --passWithNoTests -w",
     "test:staged": "vitest related ./test/*.spec.ts --passWithNoTests --run",
@@ -254,6 +259,8 @@ export default defineConfig({
     "git-commit-msg-linter": "^5.0.4",
     "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
+    "tsup": "^7.2.0",
+    "tsx": "^4.1.2",
     "typescript": "^5.2.2",
     "vitest": "^0.34.6"
   }
@@ -261,7 +268,7 @@ export default defineConfig({
 
 ```
 
-## Cria script para execução dos diversos testes
+## Cria script para execução dos diversos testes.
 No script **test:staged** abaixo a opção --run informa ao vitest nao entre eno modo watch.
 ```
   "scripts": {
@@ -311,23 +318,36 @@ public
 ./data
 vitest.config.ts
 ```
-# Prepara o buid
+# Prepara o buid.
 Para que o código javascript gerado na compilação tenha a capacidade de resolver os import do tipo '@/index'
-é necessário instalar duas bibliotecas como dependencia de desenvolvimento.
+é necessário instalar uma biblioteca para isso
 
 ```
   ~/projeto/compras
-  » npm i tsc-alias tsconfig-paths -D
+  » npm i tsup -D
 ```
-Além disso precisamos editar o script build no arquivo package.json
+Além disso precisamos editar uma arquivo de configuração denominado tsup.config.ts
+
+```
+import { defineConfig } from 'tsup';
+
+export default defineConfig({
+  entry: ['src/index.ts'],
+  splitting: false,
+  sourcemap: true,
+  clean: true
+});
+```
+
+Para o build faz-se necessário criar script build no arquivo package.json
 
 ```
 "scripts": {
-  "build": "tsc -p tsconfig-build.json && tsc-alias"
+  "build": "tsup src"
 }
 ```
 
-## Arquivo tsconfig-build
+## Arquivo tsconfig-build.
 Este arquivo tem por objetivo impedir que os códigos
 da pasta **test** sejam buildados (transpilados para javascript).
 
@@ -338,7 +358,7 @@ da pasta **test** sejam buildados (transpilados para javascript).
 }
 ```
 
-Para isso temos que passar o parâmetro abaixo, no script de buid
+Para isso temos que passar o parâmetro abaixo, no script de buid.
 
 ```
 tsc -p tsconfig-build.json
