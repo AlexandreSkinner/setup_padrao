@@ -368,29 +368,34 @@ tsc -p tsconfig-build.json
 
 
 » npm init @eslint/config
+```
 ? How would you like to use ESLint? …
   To check syntax only
   To check syntax and find problems
 ▸ To check syntax, find problems, and enforce code style
-
+```
+```
 ✔ How would you like to use ESLint? · style
 ? What type of modules does your project use? …
 ▸ JavaScript modules (import/export)
   CommonJS (require/exports)
   None of these
-
+```
 ✔ How would you like to use ESLint? · style
+```
 ✔ What type of modules does your project use? · esm
 ? Which framework does your project use? …
   React
   Vue.js
 ▸ None of these
-
+```
 ✔ How would you like to use ESLint? · style
+
 ✔ What type of modules does your project use? · esm
+```
 ✔ Which framework does your project use? · none
 ? Does your project use TypeScript? ‣ No / Yes
-
+```
 ✔ How would you like to use ESLint? · style
 ✔ What type of modules does your project use? · esm
 ✔ Which framework does your project use? · none
