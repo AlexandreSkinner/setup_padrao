@@ -140,9 +140,8 @@ Abaixo temos um exemplo do arquivo de configuração do eslint **.eslintrc.json*
 ```
 {
   "env": {
-      "es2021": true,
-      "node": true,
-      "jest": true
+      "es2022": true,
+      "node": true
   },
   "extends": "standard-with-typescript",
   "overrides": [
@@ -262,10 +261,9 @@ export default defineConfig({
     "tsup": "^7.2.0",
     "tsx": "^4.1.2",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.6"
+    "vitest": "^1.1.0"
   }
 }
-
 ```
 
 ## Cria script para execução dos diversos testes.
