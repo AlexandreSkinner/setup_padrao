@@ -146,7 +146,7 @@ quando acessada, seja feito um redirecionamento para a porta 80 de nosso contain
 
 As variavéis abaixo são utilizadas na construção do container para não expor informações sensiveis diretamente no comando de criação.
  - ${DATABASE_USER} - Obtem login name
- -  ${DATABASE_PASSWORD} - Obtem a password
+ - ${DATABASE_PASSWORD} - Obtem a password
 
 # Create and start containers
 - Cria e inicializa os containers especificado no arquivo .yaml
