@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsup src",
+    "build": "rimraf dist && tsup src",
     "start": "tsx ./src/index.ts",
     "start:dev": "tsx watch ./src/index.ts",
     "test": "vitest --passWithNoTests --run",
@@ -29,6 +29,7 @@
     "git-commit-msg-linter": "^5.0.4",
     "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
+    "rimraf": "^5.0.5",
     "tsup": "^7.2.0",
     "tsx": "^4.1.2",
     "typescript": "^5.2.2",
