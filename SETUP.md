@@ -444,3 +444,9 @@ eslint-config-standard-with-typescript@latest @typescript-eslint/eslint-plugin@^
 ▸ npm
   yarn
   pnpm
+
+## Repositório remoto (GITHUB)
+```
+origin  git@github.com:AlexandreSkinner/setup_padrao.git (fetch)
+origin  git@github.com:AlexandreSkinner/setup_padrao.git (push)
+```
