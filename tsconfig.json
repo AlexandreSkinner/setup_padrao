@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "incremental": true,
+//    "incremental": true,
     "target": "es2022",
     "module": "ESNext",
     "sourceMap": true,
