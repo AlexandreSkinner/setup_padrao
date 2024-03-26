@@ -136,7 +136,7 @@ services:
 ```
 **version:** declara a versão do docker compose.
 
-**services:** declara quais serviços serão rodados, nesse caso, chamaremos de laravel-app.
+**services:** declara quais serviços que serão rodados, nesse caso, chamaremos de database.
 
 **build:** declara o nome da imagem, ou, no caso, se declararmos o ., ele irá “chamar” a imagem
 declarada no Dockerfile.
@@ -144,11 +144,11 @@ declarada no Dockerfile.
 **ports:** realiza a liberação das portas. Nesse exemplo, queremos que seja liberada a porta 8080, porém,
 quando acessada, seja feito um redirecionamento para a porta 80 de nosso container.
 
-As variavéis abaixo são utilizadas na construção do container para não expor informações sensiveis diretamente no comando de criação.
+**environment:** As variavéis abaixo são utilizadas na construção do container para não expor informações sensiveis diretamente no comando de criação.
  - ${DATABASE_USER} - Obtem login name
  - ${DATABASE_PASSWORD} - Obtem a password
 
-# Create and start containers
+## Create and start containers
 - Cria e inicializa os containers especificado no arquivo .yaml
   existente na raiz do projeto, em caso de alguma alteração no
   arquivo .yml só será recriado o containers que foi alterado.
@@ -163,18 +163,18 @@ comandos.
 ```
 » docker-compose -p, --project-name compras up -d
 ```
-# Build or rebuild services
+## Build or rebuild services
 - Realiza apenas a parte de builder das images que serão utilizadas.
 ```
 » docker-compose build
 ```
 
-# Parar todos os containers
+## Parar todos os containers
 ```
 » docker-compose stop
 ```
 
-# Dockerfile x Docker-composefile
+## Dockerfile x Docker-composefile
 - Docker file é para criarmos a imagem da nossas aplicação.
 ```
 “O Dockerfile é um arquivo de texto que contém as instruções necessárias para criar uma nova
