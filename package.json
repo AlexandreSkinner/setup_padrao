@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "rimraf dist && tsup src",
+    "build": "rimraf dist && tsup src --format esm",
     "start": "tsx ./src/index.ts",
     "start:dev": "tsx watch ./src/index.ts",
     "test": "vitest --passWithNoTests --run",
@@ -17,7 +17,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.5",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "@vitest/coverage-v8": "^1.4.0",
