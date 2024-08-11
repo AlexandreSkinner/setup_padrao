@@ -11,7 +11,8 @@
     "test": "vitest --passWithNoTests --run",
     "test:unit": "vitest --passWithNoTests -w",
     "test:staged": "vitest related ./test/*.spec.ts --passWithNoTests --run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:debug": "vitest --inspect-brk --inspect --logHeapUsage --threads=false"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +21,7 @@
     "@types/node": "^20.12.5",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
-    "@vitest/coverage-v8": "^1.4.0",
+    "@vitest/coverage-v8": "^2.0.5",
     "eslint": "^8.53.0",
     "eslint-config-standard-with-typescript": "^39.1.1",
     "eslint-plugin-import": "^2.29.0",
@@ -30,9 +31,9 @@
     "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
     "rimraf": "^5.0.5",
-    "tsup": "^8.0.2",
-    "tsx": "^4.7.1",
+    "tsup": "^8.2.4",
+    "tsx": "^4.17.0",
     "typescript": "^5.4.3",
-    "vitest": "^1.4.0"
+    "vitest": "^2.0.5"
   }
 }

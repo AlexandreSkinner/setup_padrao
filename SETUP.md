@@ -226,45 +226,10 @@ export default defineConfig({
 ```
 ## Arquivo do Projeto - packge.json
  Este arquivo do projeto contém detre outras informações as dependencias que foram instaladas, os scripts e type module.
-```
-{
-  "name": "setup_padrao",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "build": "tsup src",
-    "start": "tsx ./src/index.ts",
-    "start:dev": "tsx watch ./src/index.ts",
-    "test": "vitest --passWithNoTests --run",
-    "test:unit": "vitest --passWithNoTests -w",
-    "test:staged": "vitest related ./test/*.spec.ts --passWithNoTests --run",
-    "test:coverage": "vitest run --coverage"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/node": "^20.9.0",
-    "@typescript-eslint/eslint-plugin": "^6.11.0",
-    "@typescript-eslint/parser": "^6.11.0",
-    "@vitest/coverage-v8": "^1.1.0",
-    "eslint": "^8.53.0",
-    "eslint-config-standard-with-typescript": "^39.1.1",
-    "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-n": "^16.3.1",
-    "eslint-plugin-promise": "^6.1.1",
-    "git-commit-msg-linter": "^5.0.4",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.1.0",
-    "tsup": "^7.2.0",
-    "tsx": "^4.1.2",
-    "typescript": "^5.2.2",
-    "vitest": "^1.1.0"
-  }
-}
-```
+
+
+![Legenda](./docs/package-json.png)
+
 
 ## Cria script para execução dos diversos testes.
 No script **test:staged** abaixo a opção --run informa ao vitest nao entre eno modo watch.
@@ -450,3 +415,5 @@ eslint-config-standard-with-typescript@latest @typescript-eslint/eslint-plugin@^
 origin  git@github.com:AlexandreSkinner/setup_padrao.git (fetch)
 origin  git@github.com:AlexandreSkinner/setup_padrao.git (push)
 ```
+
+![Legenda](./docs/docker-compose.png)
