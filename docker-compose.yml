@@ -1,18 +1,28 @@
-version: '3.8'
+# A chave "version" foi removida: o Compose V2 a ignora e emite aviso.
+name: setup-padrao
 
 volumes:
   pg_data:
 
 services:
   database:
-    container_name: postgres_container
-    image: postgres:15.2-alpine
-    env_file: .env
+    image: postgres:18-alpine
+    container_name: setup_padrao_postgres
+    restart: unless-stopped
     environment:
-      - POSTGRES_USER=${DATABASE_USER}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-      - POSTGRES_DB=mycompras
+      # Interpolados a partir do .env da raiz, lido automaticamente pelo Compose.
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
     ports:
-      - "5433:5432"
+      - '${DATABASE_PORT:-5433}:5432'
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      # Monta o diretorio pai: o PostgreSQL 18 mudou o caminho padrao do PGDATA,
+      # e montar /var/lib/postgresql funciona nas duas convencoes.
+      - pg_data:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
