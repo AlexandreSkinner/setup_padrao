@@ -1,0 +1,36 @@
+{
+  // --- Formatacao ---
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // --- ESLint (flat config em eslint.config.ts) ---
+  "eslint.useFlatConfig": true,
+  "eslint.validate": ["typescript", "javascript"],
+
+  // --- Code Runner ---
+  "code-runner.executorMap": {
+    "javascript": "node",
+    "typescript": "clear && npx tsx"
+  },
+  // Sempre executa o arquivo inteiro. Sem isto, havendo texto selecionado o
+  // Code Runner roda apenas a selecao (via src/tempCodeRunnerFile.ts), que
+  // fica sem os imports do topo e quebra com ReferenceError.
+  "code-runner.ignoreSelection": true,
+
+  // --- Testes ---
+  "testing.automaticallyOpenPeekView": "never",
+
+  // --- TypeScript ---
+  // Usa a versao do TypeScript do projeto, nao a embutida no VS Code.
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/coverage": true
+  }
+}

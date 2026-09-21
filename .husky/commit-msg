@@ -1,0 +1,3 @@
+# O git-commit-msg-linter instala seu hook em .git/hooks, que o Git ignora
+# porque o husky aponta core.hooksPath para .husky. Por isso ele é chamado aqui.
+node ./node_modules/commit-msg-linter/commit-msg-linter.js

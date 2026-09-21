@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "vitest.explorer",
+    "editorconfig.editorconfig",
+    "formulahendry.code-runner",
+    "github.vscode-github-actions"
+  ]
+}

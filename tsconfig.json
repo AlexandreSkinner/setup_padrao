@@ -1,24 +1,44 @@
 {
   "compilerOptions": {
-//    "incremental": true,
-    "target": "es2022",
-    "module": "ESNext",
-    "sourceMap": true,
-    "removeComments": true,
-    "esModuleInterop": true,
-    "rootDirs": ["src","test"],
-    "outDir": "./dist",
-    "moduleResolution": "node",
-    "strict": true,
-    "noEmitOnError": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    /* Linguagem e ambiente */
+    "target": "es2023",
+    "lib": ["es2023"],
+    "types": ["node", "vitest/globals"],
+
+    /* Módulos: o build é bundlado por tsup/esbuild e o dev roda em tsx,
+       então "bundler" descreve a resolução real (permite import sem extensão
+       e respeita os alias de "paths"). */
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "paths": {
-      "@/*": ["*"],
-      "@/test/*": ["../test/*"]
+      "@/test/*": ["./test/*"],
+      "@/*": ["./src/*"]
     },
-    "baseUrl": "src"
+
+    /* Rigor de tipos */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    /* Interoperabilidade com o transpiler (esbuild) */
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Emissão: quem gera o dist é o tsup; aqui o tsc só confere tipos. */
+    "noEmit": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "incremental": true,
+    "tsBuildInfoFile": "./node_modules/.cache/tsconfig.tsbuildinfo"
   },
-  "include": ["src", "test", "vitest.config.ts", "tsup.config.ts"],
-  "exclude": ["dist", "node_modules"]
+  "include": ["src", "test", "types", "*.config.ts", "eslint.config.ts"],
+  "exclude": ["dist", "node_modules", "coverage", "**/tempCodeRunnerFile.*"]
 }

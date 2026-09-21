@@ -1,419 +1,311 @@
-# Criar a pasta da aplicação.
-  Cria a pasta do Projeto como uma subpasta de **projeto**.
+# Montando o setup do zero
 
-```
-~/projeto
-» mkdir vitest-template
-» cd vitest-template
-vitest-tamplate on  master [?]
-```
-# Inicializar o GIT.
-  Este comando inicia o controle de versão do código fonte em repositório local.
+Este documento descreve como esta estrutura foi montada, na ordem em que as
+peças se encaixam. Para usar o template no dia a dia veja o [README](./README.md).
 
-```
-~/projeto/vitest-template
-» git init
-```
-# Inicializar o projeto.
-  Este comando cria um arquivo do projeto denominado **package.json** que
-  controla as dependências das bibliotecas utilizadas no projeto.
+Versões de referência: Node 24, npm 11, TypeScript 6.0, ESLint 10, Vitest 5.
 
-```
-~/projeto/vitest-template
-» npm init -y
-```
-# Instalar biblioteca git-commit-msg-linter.
-  Esta biblioteca é responsavel por padronizar as mensagens dos nossos commit. Segue o padrão do conventional commit, bloqueando commit que não estiverem em conformidade com este padrão.
- _"Conventional Commit"_.
-  [Site conventional commit](https://www.conventionalcommits.org/en/v1.0.0/)
+---
 
-```
-~/projeto/vitest-template
-» npm i -D git-commit-msg-linter
-```
-# Cria arquivo .gitignore
-Este arquivo serve para informamos as pastas / arquivos para os quais não desejamos controlar versão.
-```
-node_modules
-coverage
-dist
-.env
-VSCode.md
+## 1. Pasta, git e package.json
+
+```bash
+mkdir meu-projeto && cd meu-projeto
+git init
+npm init -y
 ```
 
-# Instalar o Typescript
-Instala o compilador da linguagem de programação Typescript e os types do *node* que adicina tipagem ao mesmo, ajudando no intellisence dos comandos.
+No `package.json`, três campos definem o resto do comportamento:
 
-```
-~/projeto/vitest-template
-» npm i -D typescript @types/node
-```
-# Inicializando projeto Typescript.
-  Cria o arquivo de configuração do compilador typescript (tsconfig.json).
-```
-  ~/projeto/vitest-template
-  » npx tsc --init
-```
-Como o typescript foi instalado como dependencia de desenvolvimento temos que utilizar o comando **npx** para executar o compilador **tsc**
-
-## Arquivo de configuração do Typescript (tsconfig.json).
-
-Este arquivo que é inspecionado pelo typescript no momento da compilação.
-```
+```json
 {
-  "compilerOptions": {
-    "incremental": true,
-    "target": "es2022",
-    "module": "ESNext",
-    "sourceMap": true,
-    "removeComments": true,
-    "esModuleInterop": true,
-    "rootDirs": ["src","test"],
-    "outDir": "./dist",
-    "moduleResolution": "node",
-    "strict": true,
-    "noEmitOnError": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "@/*": ["*"],
-      "@/test/*": ["../test/*"]
-    },
-    "baseUrl": "src"
-  },
-  "include": ["src", "test", "vitest.config.ts", "tsup.config.ts"],
-  "exclude": ["dist", "node_modules"]
+  "type": "module",
+  "private": true,
+  "engines": { "node": "^22.16.0 || >=24.0.0" }
 }
 ```
-# Instalando o ESLINT.
-Realiza a instalação do eslint, bem como configura o padrão da sintaxe do typescript tendo por base as regras definidas no style standard-with-typescript.
+
+- `type: module` — o projeto é ESM.
+- `private: true` — impede publicação acidental no npm.
+- `engines` — documenta e valida a versão mínima de Node. O intervalo exclui
+  a linha 23.x porque `import.meta.dirname` só existe em `^22.16` e `>=24`.
+
+Registre também a versão de trabalho em `.nvmrc`.
+
+---
+
+## 2. TypeScript
+
+```bash
+npm i -D typescript @types/node
 ```
-  ~/projeto/vitest-template
-  » npm i --save-dev @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint eslint-plugin-node
 
+O `tsconfig.json` deste template tem quatro decisões que valem explicação:
+
+**Resolução de módulos: `bundler`, não `nodenext`.**
+
+```json
+"module": "preserve",
+"moduleResolution": "bundler"
 ```
-Importante que sejam nas versões abaixo:
-```
-    "@typescript-eslint/eslint-plugin": "^5.59.2",
-    "@typescript-eslint/parser": "^5.59.2",
-    "eslint": "^8.44.0",
-    "eslint-config-standard-with-typescript": "^34.0.1",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-n": "^15.7.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.1.1",
-```
-  ## Inicializando o eslint.
-  O eslint serve para pontuar erros de sintaxe e formatar o código fonte que estiver fora da especificação standard javascript style.
-```
-  ~/projeto/vitest-template
-  » npm init @eslint/config
-```
-O processo de configuração apresentará um quiz que deverá ter as respostas abaixo:
 
-✅ How would you like to use ESLint? · **style**
+`nodenext` é o correto quando o Node resolve os imports sozinho — mas aqui quem
+resolve é o esbuild (via tsup no build e tsx em desenvolvimento). Com `nodenext`
+os imports precisariam de extensão explícita (`'./operacoes.js'`) e os alias
+`@/...` deixam de resolver. `bundler` descreve a realidade do projeto.
 
-✅ What type of modules does your project use? · **esm**
+**`noEmit: true`.** Quem gera o `dist/` é o tsup; o `tsc` aqui só confere tipos.
 
-✅ Which framework does your project use? ·**none**
+**Rigor além do `strict`.** `noUncheckedIndexedAccess` (acesso a índice passa a
+ser `T | undefined` — pega a maior classe de bug que o `strict` sozinho deixa
+passar), `exactOptionalPropertyTypes`, `noImplicitReturns`, `noUnusedLocals`.
 
-✅ Does your project use TypeScript? · No / **Yes**
+**Compatibilidade com o transpiler.** `isolatedModules` e `verbatimModuleSyntax`
+são obrigatórios na prática quando o build é feito por esbuild, que compila
+arquivo a arquivo e não enxerga o programa inteiro.
 
-✅ Where does your code run? · No items were selected
+**Alias.** `baseUrl` na raiz e `paths` mapeando `@/*` → `src/*`:
 
-✅ How would you like to define a style for your project? · **guide**
-
-✅ Which style guide do you want to follow? · **standard-with-typescript**
-
-✅ What format do you want your config file to be in? · **JSON**
-<p>Checking peerDependencies of eslint-config-standard-with-typescript@latest</p>
-The config that you've selected requires the following dependencies:
-
-eslint-config-standard-with-typescript@latest @typescript-eslint/eslint-plugin@^5.50.0 eslint@^8.0.1 eslint-plugin-import@^2.25.2 eslint-plugin-n@^15.0.0 eslint-plugin-promise@^6.0.0 typescript@*
-
-✅ Would you like to install them now? · No / **Yes**
-
-✅ Which package manager do you want to use? · **npm**
-
-## Arquivo de configuração do lint (.eslintrc.json).
-Abaixo temos um exemplo do arquivo de configuração do eslint **.eslintrc.json**
-```
-{
-  "env": {
-      "es2022": true,
-      "node": true
-  },
-  "extends": "standard-with-typescript",
-  "overrides": [
-  ],
-  "parserOptions": {
-      "ecmaVersion": "latest",
-      "sourceType": "module",
-      "project": ["./tsconfig.json"]
-  },
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
-  "rules": {
-      "@typescript-eslint/strict-boolean-expressions": "off",
-      "@typescript-eslint/consistent-type-imports": "off",
-      "@typescript-eslint/semi": "off",
-      "semi": [2, "always"]
-  }
+```json
+"baseUrl": ".",
+"paths": {
+  "@/test/*": ["test/*"],
+  "@/*": ["src/*"]
 }
 ```
-# Instalando o husky.
-  Permite utilizarmos os hook do git para garantir que não iremos commitar código fora das
-  diretrizes parametrizadas no eslint e que não estiverem passando no teste de unit do vitest.
-```
-    ~/projeto/vitest-template
-    » npm install husky -D
-    » npm install -D lint-staged
-```
-  A biblioteca lint-stage determina que o lint e vitest atuem apenas nos arquivos que se encontram na staged area do git.
 
-  O primeiro comando instala o husky, criando a pasta de mesmo nome.
-  O segundo comando cria arquivo de pre-commit com o comando que está entre aspas dentro dele.
-  Fazendo com que um commit que não passe no teste realizado pelo Vitest não seja efetivado.
-```
-    ~/projeto/compras
-    » npx husky install
-    » npx husky add .husky/pre-commit "npx lint-staged"
-```
-## Arquivo do lintstaged (lintstagedrc.json).
-Este arquivo define os comandos que atuaram nos arquivos na stage area disparado pelo hook do pre-commit.
-São executados o eslint para fixar os possiveis erros e o teste através do script**test:staged**
-```
-{
-  "*.ts": [
-    "eslint 'src/**' --fix",
-    "npm run test:staged"
-  ]
-}
-```
-# Instalando o Vitest.
-  O comando abaixo instala o Vitest, a biblioteca de teste para o Typescript ou Javascript.
+O padrão mais específico (`@/test/*`) precisa vir antes do genérico.
 
-```
-  ~/projeto/vitest-template
-  » npm install -D vitest
-```
-Por padrão, o Vitest usa o pacote c8 para executar relatórios de cobertura. Entretanto, ele está sendo substituido pelo pacote v8, para instalá-lo use o comando:
-```
-  ~/projeto/vitest-template
-  » npm install -D @vitest/coverage-v8
+---
+
+## 3. Build com tsup
+
+```bash
+npm i -D tsup
 ```
 
-Abaixo temos um exemplo de arquivo de configuração do Vitest.
+Como este é um template de **aplicação** (não de biblioteca), o build é um
+bundle de entrada única:
 
-## Arquivo de configuração do Vitest (vitest.config.js)
-Este arquivo configura o vitest, dentre outras coisas, para reconhecer os alias _"@/*"_ e _"@/test/*"_
-```
-import { defineConfig } from "vitest/config";
-import path from "path";
-
-export default defineConfig({
-  test: {
-    globals: true,
-    environment: 'node',
-  },
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-      "@/test": path.resolve(__dirname, "./test"),
-    },
-  },
-});
-```
-## Arquivo do Projeto - packge.json
- Este arquivo do projeto contém detre outras informações as dependencias que foram instaladas, os scripts e type module.
-
-
-![Legenda](./docs/package-json.png)
-
-
-## Cria script para execução dos diversos testes.
-No script **test:staged** abaixo a opção --run informa ao vitest nao entre eno modo watch.
-```
-  "scripts": {
-    "build": "tsc -p tsconfig-build.json && tsc-alias",
-    "test": "vitest --passWithNoTests --run",
-    "test:unit": "vitest --passWithNoTests -w",
-    "test:staged": "vitest related ./test/*.spec.ts --passWithNoTests --run",
-    "test:coverage": "vitest run --coverage"
-  },
-```
-  ## Executando os teste.
-  Para executar o vitest direto ou através de um script
-```
-  ~/projeto/vitest-template
-  » npx vitest
-  » npm run <script>
-```
-
-  ## Snippet para Vitest.
-  Abaixo temos um snippet para evitarmos digitar código repetido toda vez
-  que formos elaborar um teste. O texto do prefixo é chave para "buscar" o snippet.
-```
-{
-  "Jest Test": {
-    "prefix": ["test"],
-      "body": [
-        "describe('$1', () => {",
-        "  test('$2', () => {",
-        "$3",
-        "  });",
-        "});",
-        ""
-      ],
-    "description": "A describe block for Jest"
-  }
-}
-```
-## Crie arquivo .eslintignore
-Criar o arquivo abaixo para evitar a atuação do eslint sobre eles
-```
-.husky
-.vscode
-coverage
-dist
-node_modules
-public
-./data
-vitest.config.ts
-```
-# Prepara o buid.
-Para que o código javascript gerado na compilação tenha a capacidade de resolver os import do tipo '@/index'
-é necessário instalar uma biblioteca para isso
-
-```
-  ~/projeto/compras
-  » npm i tsup -D
-```
-Além disso precisamos editar uma arquivo de configuração denominado tsup.config.ts
-
-```
-import { defineConfig } from 'tsup';
-
+```ts
+// tsup.config.ts
 export default defineConfig({
   entry: ['src/index.ts'],
-  splitting: false,
-  sourcemap: true,
-  clean: true
+  format: ['esm'],
+  target: 'node22',
+  platform: 'node',
+  bundle: true,
+  clean: true,
+  dts: false
 });
 ```
 
-Para o build faz-se necessário criar script build no arquivo package.json
+`clean: true` dispensa o `rimraf` no script de build.
 
+Para uma **biblioteca**, mude para `dts: true` e declare `exports` e `files`
+no `package.json`.
+
+> O esbuild transpila sem checar tipos. Por isso `npm run typecheck` existe
+> como passo separado — sem ele é possível buildar código que não compila.
+
+---
+
+## 4. Execução em desenvolvimento
+
+```bash
+npm i -D tsx
 ```
-"scripts": {
-  "build": "tsup src"
+
+```json
+"start": "tsx --env-file-if-exists=.env ./src/index.ts",
+"start:dev": "tsx watch --env-file-if-exists=.env ./src/index.ts"
+```
+
+`--env-file-if-exists` é do próprio Node (20.6+): carrega o `.env` sem dotenv.
+
+---
+
+## 5. ESLint 10 (flat config)
+
+```bash
+npm i -D eslint @eslint/js typescript-eslint eslint-plugin-n \
+         eslint-plugin-promise eslint-config-prettier globals jiti
+```
+
+O formato `.eslintrc.json` foi descontinuado: o padrão desde a v9 é o **flat
+config**, e o `.eslintignore` também deixou de ser lido (os ignores vão dentro
+da config). O `eslint-config-standard-with-typescript` está deprecado.
+
+A config vive em `eslint.config.ts` — TypeScript, resolvido pelo `jiti`. Isso
+faz o próprio arquivo de configuração ser checado por tipos.
+
+Pontos de atenção:
+
+- `projectService: true` substitui o antigo `project: ['./tsconfig.json']`:
+  descobre o tsconfig sozinho e é bem mais rápido.
+- `eslint-config-prettier` **por último**, desligando tudo que conflita com o
+  formatador.
+- `n/no-missing-import` fica desligado porque os alias `@/` não são resolvíveis
+  pelo Node.
+- `eslint-plugin-promise` não publica tipos; sem a declaração em
+  `types/eslint-plugin-promise.d.ts` ele entra como `any` e derruba as regras
+  `no-unsafe-*` dentro da própria config.
+
+---
+
+## 6. Prettier
+
+```bash
+npm i -D prettier
+```
+
+Divisão de responsabilidades: **Prettier formata, ESLint analisa.** As regras
+de estilo do ESLint são desligadas pelo `eslint-config-prettier`, evitando que
+as duas ferramentas briguem pelo mesmo arquivo.
+
+Configuração em `.prettierrc.json`, exclusões em `.prettierignore`.
+
+---
+
+## 7. Vitest
+
+```bash
+npm i -D vitest @vitest/coverage-v8
+```
+
+O `vitest.config.ts` repete os alias do `tsconfig.json` (o Vitest não lê
+`paths` sozinho) e define a cobertura:
+
+```ts
+coverage: {
+  provider: 'v8',
+  reporter: ['text', 'html', 'lcov'],
+  include: ['src/**/*.ts'],
+  exclude: ['src/**/*.d.ts', 'src/index.ts'],
+  thresholds: { lines: 80, functions: 80, branches: 80, statements: 80 }
 }
 ```
 
-## Arquivo tsconfig-build.
-Este arquivo tem por objetivo impedir que os códigos
-da pasta **test** sejam buildados (transpilados para javascript).
+Sem `thresholds` o relatório é apenas informativo e nada reprova.
 
+Para depurar: `npm run test:debug` (usa `--no-file-parallelism`; a antiga
+flag `--threads=false` foi removida no Vitest 2).
+
+---
+
+## 8. Husky 9 e lint-staged
+
+```bash
+npm i -D husky lint-staged
+npm pkg set scripts.prepare="husky"
+npm run prepare
 ```
+
+Na v9 o arquivo de hook é só o comando — as duas linhas de shebang do husky 8
+foram removidas, e `husky install`/`husky add` deram lugar a `husky init`.
+
+```sh
+# .husky/pre-commit
+npx lint-staged
+```
+
+No `.lintstagedrc.json`, **não** repita o glob nos comandos: o lint-staged já
+passa a lista de arquivos em stage como argumento.
+
+```json
 {
-  "extends": "./tsconfig.json",
-  "exclude": ["test"]
+  "*.ts": [
+    "prettier --write",
+    "eslint --fix",
+    "vitest related --run --passWithNoTests"
+  ],
+  "*.{json,md,yml,yaml}": ["prettier --write"]
 }
 ```
 
-Para isso temos que passar o parâmetro abaixo, no script de buid.
+`vitest related` recebe **arquivos-fonte** e descobre sozinho quais testes
+dependem deles.
 
-```
-tsc -p tsconfig-build.json
-```
+---
 
+## 9. Validação da mensagem de commit
 
-
-
-» npm init @eslint/config
-```
-? How would you like to use ESLint? …
-  To check syntax only
-  To check syntax and find problems
-▸ To check syntax, find problems, and enforce code style
-```
-```
-✔ How would you like to use ESLint? · style
-? What type of modules does your project use? …
-▸ JavaScript modules (import/export)
-  CommonJS (require/exports)
-  None of these
-```
-✔ How would you like to use ESLint? · style
-```
-✔ What type of modules does your project use? · esm
-? Which framework does your project use? …
-  React
-  Vue.js
-▸ None of these
-```
-✔ How would you like to use ESLint? · style
-
-✔ What type of modules does your project use? · esm
-```
-✔ Which framework does your project use? · none
-? Does your project use TypeScript? ‣ No / Yes
-```
-✔ How would you like to use ESLint? · style
-✔ What type of modules does your project use? · esm
-✔ Which framework does your project use? · none
-✔ Does your project use TypeScript? · No / Yes
-? Where does your code run? …  (Press <space> to select, <a> to toggle all, <i> to invert selection)
-✔ Browser
-✔ Node
-
-✔ How would you like to use ESLint? · style
-✔ What type of modules does your project use? · esm
-✔ Which framework does your project use? · none
-✔ Does your project use TypeScript? · No / Yes
-✔ Where does your code run? · node
-? How would you like to define a style for your project? …
-▸ Use a popular style guide
-  Answer questions about your style
-
-✔ How would you like to use ESLint? · style
-✔ What type of modules does your project use? · esm
-✔ Which framework does your project use? · none
-✔ Does your project use TypeScript? · No / Yes
-✔ Where does your code run? · node
-✔ How would you like to define a style for your project? · guide
-? Which style guide do you want to follow? …
-▸ Standard: https://github.com/standard/eslint-config-standard-with-typescript
-  XO: https://github.com/xojs/eslint-config-xo-typescript
-
-✔ How would you like to use ESLint? · style
-✔ What type of modules does your project use? · esm
-✔ Which framework does your project use? · none
-✔ Does your project use TypeScript? · No / Yes
-✔ Where does your code run? · node
-✔ How would you like to define a style for your project? · guide
-✔ Which style guide do you want to follow? · standard-with-typescript
-? What format do you want your config file to be in? …
-  JavaScript
-  YAML
-▸ JSON
-
-Checking peerDependencies of eslint-config-standard-with-typescript@latest
-The config that you've selected requires the following dependencies:
-
-eslint-config-standard-with-typescript@latest @typescript-eslint/eslint-plugin@^6.4.0 eslint@^8.0.1 eslint-plugin-import@^2.25.2 eslint-plugin-n@^15.0.0 || ^16.0.0  eslint-plugin-promise@^6.0.0 typescript@*
-? Would you like to install them now? ‣ No / Yes
-
-✔ Would you like to install them now? · No / Yes
-? Which package manager do you want to use? …
-▸ npm
-  yarn
-  pnpm
-
-## Repositório remoto (GITHUB)
-```
-origin  git@github.com:AlexandreSkinner/setup_padrao.git (fetch)
-origin  git@github.com:AlexandreSkinner/setup_padrao.git (push)
+```bash
+npm i -D git-commit-msg-linter
 ```
 
-![Legenda](./docs/docker-compose.png)
+**Atenção:** o pacote instala o hook em `.git/hooks/commit-msg`, que o Git
+**ignora** quando o husky aponta `core.hooksPath` para `.husky`. Sem a ponte
+abaixo, a validação simplesmente nunca roda:
+
+```sh
+# .husky/commit-msg
+node ./node_modules/commit-msg-linter/commit-msg-linter.js
+```
+
+---
+
+## 10. Variáveis de ambiente
+
+```bash
+npm i zod
+```
+
+`src/config/env.ts` valida `process.env` contra um esquema e falha no boot com
+mensagem clara. Tudo que vem do ambiente é string, por isso os campos numéricos
+usam `z.coerce`.
+
+Versione o `.env.example`; mantenha o `.env` fora do repositório.
+
+---
+
+## 11. Integração contínua
+
+`.github/workflows/ci.yml` roda, em Node 22 e 24, exatamente o que o
+desenvolvedor roda localmente: `format:check`, `typecheck`, `lint`,
+`test:coverage` e `build`.
+
+O hook de pre-commit é local e pode ser contornado com `--no-verify`; a CI é
+a rede de segurança real.
+
+---
+
+## 12. Docker
+
+`docker-compose.yml` sobe um PostgreSQL 18 para desenvolvimento, com
+healthcheck e credenciais vindas do `.env`. A chave `version:` não existe mais
+no Compose V2.
+
+O `Dockerfile` é multi-stage: um estágio compila, outro carrega só o `dist/` e
+as dependências de produção, rodando como usuário `node`.
+
+---
+
+## Versao do TypeScript
+
+O projeto usa **TypeScript 6.0.3**, fixado como `~6.0.3`.
+
+O range e `~` e nao `^` de proposito: o peer do `typescript-eslint` e
+`>=4.8.4 <6.1.0`, entao um `^6.0.3` deixaria entrar uma futura 6.1 que
+quebraria o lint com reconhecimento de tipos.
+
+O **TypeScript 7** (compilador reescrito em Go) ja esta publicado como
+`latest`, mas ainda nao e utilizavel aqui: o `typescript-eslint` recusa a
+versao de forma explicita.
+
+```
+Error: typescript-eslint does not support TS 7.0.
+```
+
+O suporte e rastreado em
+[typescript-eslint#10940](https://github.com/typescript-eslint/typescript-eslint/issues/10940).
+
+Fora o lint, o restante ja funciona com o TS 7: testado nesta base, `typecheck`,
+`build` e testes passam. O `tsconfig.json` tambem ja esta preparado — nao usa
+mais `baseUrl` (removido no TS 7) e os `paths` sao relativos, como o TS 7 exige.
+
+Quando o `typescript-eslint` liberar a versao, o upgrade e apenas:
+
+```bash
+npm i -D typescript@latest
+```
