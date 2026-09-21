@@ -3,7 +3,7 @@
 Este documento descreve como esta estrutura foi montada, na ordem em que as
 peças se encaixam. Para usar o template no dia a dia veja o [README](./README.md).
 
-Versões de referência: Node 24, npm 11, TypeScript 5.9, ESLint 10, Vitest 5.
+Versões de referência: Node 24, npm 11, TypeScript 6.0, ESLint 10, Vitest 5.
 
 ---
 
@@ -281,25 +281,30 @@ as dependências de produção, rodando como usuário `node`.
 
 ---
 
-## Nota sobre o TypeScript 7
+## Versao do TypeScript
 
-O TypeScript 7 (compilador reescrito em Go) **ainda não é utilizável aqui**:
-o `typescript-eslint` recusa a versão explicitamente, e sem ele não há lint
-com reconhecimento de tipos.
+O projeto usa **TypeScript 6.0.3**, fixado como `~6.0.3`.
+
+O range e `~` e nao `^` de proposito: o peer do `typescript-eslint` e
+`>=4.8.4 <6.1.0`, entao um `^6.0.3` deixaria entrar uma futura 6.1 que
+quebraria o lint com reconhecimento de tipos.
+
+O **TypeScript 7** (compilador reescrito em Go) ja esta publicado como
+`latest`, mas ainda nao e utilizavel aqui: o `typescript-eslint` recusa a
+versao de forma explicita.
 
 ```
 Error: typescript-eslint does not support TS 7.0.
 ```
 
-O suporte é rastreado em
+O suporte e rastreado em
 [typescript-eslint#10940](https://github.com/typescript-eslint/typescript-eslint/issues/10940).
 
-Fora isso, o projeto já está pronto para a migração: o `tsconfig.json` não usa
-mais `baseUrl` (removido no TS 7) e os `paths` são relativos, como o TS 7 exige
-— forma que o TS 5 também aceita. Testado nesta base, o TS 7 passa no
-`typecheck`, no `build` e nos testes; só o `lint` falha.
+Fora o lint, o restante ja funciona com o TS 7: testado nesta base, `typecheck`,
+`build` e testes passam. O `tsconfig.json` tambem ja esta preparado — nao usa
+mais `baseUrl` (removido no TS 7) e os `paths` sao relativos, como o TS 7 exige.
 
-Quando o `typescript-eslint` liberar a versão, o upgrade é apenas:
+Quando o `typescript-eslint` liberar a versao, o upgrade e apenas:
 
 ```bash
 npm i -D typescript@latest
