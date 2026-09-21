@@ -1,0 +1,75 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Depura o arquivo .ts aberto no editor.
+      "type": "node",
+      "request": "launch",
+      "name": "Debug: arquivo atual",
+      "program": "${file}",
+      // O tsx entra como loader DO PROPRIO processo. Chamar o binario
+      // node_modules/.bin/tsx criaria um processo filho e o inspetor ficaria
+      // no filho, deixando os breakpoints sem vinculo.
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "--import",
+        "tsx",
+        "--enable-source-maps",
+        "--env-file-if-exists=.env"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      // Depura sempre o ponto de entrada da aplicacao.
+      "type": "node",
+      "request": "launch",
+      "name": "Debug: src/index.ts",
+      "program": "${workspaceFolder}/src/index.ts",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "--import",
+        "tsx",
+        "--enable-source-maps",
+        "--env-file-if-exists=.env"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      // Depura o arquivo de teste aberto no editor.
+      "type": "node",
+      "request": "launch",
+      "name": "Debug: teste atual",
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": ["run", "--no-file-parallelism", "${relativeFile}"],
+      // ESSENCIAL: o Vitest executa os testes num processo filho, nunca no
+      // processo que o VS Code inicia. Sem isto o depurador fica no pai e
+      // nenhum breakpoint do teste e atingido.
+      "autoAttachChildProcesses": true,
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "smartStep": true,
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      // Depura a suite inteira.
+      "type": "node",
+      "request": "launch",
+      "name": "Debug: todos os testes",
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": ["run", "--no-file-parallelism"],
+      "autoAttachChildProcesses": true,
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "smartStep": true,
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    }
+  ]
+}

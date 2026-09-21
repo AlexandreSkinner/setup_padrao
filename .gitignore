@@ -10,5 +10,10 @@ dist
 # Temporario do Code Runner; sobra em src/ se a execucao for interrompida.
 **/tempCodeRunnerFile.*
 
+# O .vscode e versionado (launch/settings/extensions fazem parte do setup).
+# Só o que é pessoal fica de fora.
+.vscode/*
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/extensions.json
 VSCode.md
-.vscode

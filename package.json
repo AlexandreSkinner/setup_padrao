@@ -22,7 +22,7 @@
     "test": "vitest --passWithNoTests --run",
     "test:unit": "vitest --passWithNoTests",
     "test:coverage": "vitest run --coverage",
-    "test:debug": "vitest --inspect-brk --no-file-parallelism --logHeapUsage",
+    "test:debug": "vitest run --inspect-brk --no-file-parallelism",
     "check": "npm run typecheck && npm run lint && npm run test"
   },
   "keywords": [],
