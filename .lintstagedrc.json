@@ -1,6 +1,8 @@
 {
   "*.ts": [
-    "eslint 'src/**' --fix",
-    "npm run test:staged"
-  ]
+    "prettier --write",
+    "eslint --fix",
+    "vitest related --run --passWithNoTests"
+  ],
+  "*.{json,md,yml,yaml}": ["prettier --write"]
 }
