@@ -1,6 +1,11 @@
 node_modules
 coverage
 dist
+
+# Segredos: o .env.example é a única versão versionada.
 .env
+.env.*
+!.env.example
+
 VSCode.md
 .vscode
