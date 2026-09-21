@@ -40,5 +40,5 @@
     "tsBuildInfoFile": "./node_modules/.cache/tsconfig.tsbuildinfo"
   },
   "include": ["src", "test", "types", "*.config.ts", "eslint.config.ts"],
-  "exclude": ["dist", "node_modules", "coverage"]
+  "exclude": ["dist", "node_modules", "coverage", "**/tempCodeRunnerFile.*"]
 }

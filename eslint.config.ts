@@ -7,7 +7,14 @@ import prettier from 'eslint-config-prettier';
 import globals from 'globals';
 
 export default defineConfig([
-  globalIgnores(['dist/**', 'coverage/**', 'node_modules/**', '.husky/**']),
+  globalIgnores([
+    'dist/**',
+    'coverage/**',
+    'node_modules/**',
+    '.husky/**',
+    // Temporario do Code Runner, criado ao executar uma selecao de codigo.
+    '**/tempCodeRunnerFile.*'
+  ]),
 
   {
     files: ['**/*.ts'],

@@ -7,5 +7,8 @@ dist
 .env.*
 !.env.example
 
+# Temporario do Code Runner; sobra em src/ se a execucao for interrompida.
+**/tempCodeRunnerFile.*
+
 VSCode.md
 .vscode
