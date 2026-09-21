@@ -278,3 +278,29 @@ no Compose V2.
 
 O `Dockerfile` é multi-stage: um estágio compila, outro carrega só o `dist/` e
 as dependências de produção, rodando como usuário `node`.
+
+---
+
+## Nota sobre o TypeScript 7
+
+O TypeScript 7 (compilador reescrito em Go) **ainda não é utilizável aqui**:
+o `typescript-eslint` recusa a versão explicitamente, e sem ele não há lint
+com reconhecimento de tipos.
+
+```
+Error: typescript-eslint does not support TS 7.0.
+```
+
+O suporte é rastreado em
+[typescript-eslint#10940](https://github.com/typescript-eslint/typescript-eslint/issues/10940).
+
+Fora isso, o projeto já está pronto para a migração: o `tsconfig.json` não usa
+mais `baseUrl` (removido no TS 7) e os `paths` são relativos, como o TS 7 exige
+— forma que o TS 5 também aceita. Testado nesta base, o TS 7 passa no
+`typecheck`, no `build` e nos testes; só o `lint` falha.
+
+Quando o `typescript-eslint` liberar a versão, o upgrade é apenas:
+
+```bash
+npm i -D typescript@latest
+```

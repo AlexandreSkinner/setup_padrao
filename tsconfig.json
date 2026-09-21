@@ -11,10 +11,9 @@
     "module": "preserve",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "baseUrl": ".",
     "paths": {
-      "@/test/*": ["test/*"],
-      "@/*": ["src/*"]
+      "@/test/*": ["./test/*"],
+      "@/*": ["./src/*"]
     },
 
     /* Rigor de tipos */
